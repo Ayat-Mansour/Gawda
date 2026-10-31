@@ -194,6 +194,48 @@
     }
 
     .cover h1{font-size:clamp(44px,min(6.5vw,11.5vh),92px)}
+    /* Phone reader: these rules only apply below 700px.  Desktop keeps the
+       original fixed boards and the original fit() scaling unchanged. */
+    @media(max-width:700px){
+      body.project-view .fit.phone-layout{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:14px 12px 24px;background:#eef8f8!important;-webkit-overflow-scrolling:touch}
+      body.project-view .fit.phone-layout .bgfill{display:none}
+      body.project-view .fit.phone-layout .stage{position:relative!important;left:auto!important;top:auto!important;transform:none!important;transform-origin:top left!important;width:100%!important;height:auto!important;min-height:0!important;margin:0!important}
+      body.project-view .fit.phone-layout .stage>img{position:static!important;display:block!important;width:100%!important;height:auto!important;max-width:100%!important;margin:0 auto 12px!important;object-fit:contain!important}
+
+      /* Project 01 becomes a readable vertical story. */
+      body.project-view .fit.phone-layout .p1-board{padding:12px!important;border-width:4px!important;border-radius:14px!important;overflow:visible!important}
+      body.project-view .fit.phone-layout .p1-board .p1-head{position:static!important;display:flex!important;gap:9px!important;padding:0 0 10px!important;margin:0 0 12px!important}
+      body.project-view .fit.phone-layout .p1-board .p1-head img{width:42px!important;height:42px!important;border-width:2px!important;flex:none!important;margin:0!important}
+      body.project-view .fit.phone-layout .p1-board .p1-head b{font-size:21px!important;line-height:1.05!important}
+      body.project-view .fit.phone-layout .p1-board .p1-head span{margin-top:4px!important;font-size:11px!important;line-height:1.25!important}
+      body.project-view .fit.phone-layout .p1-board .p1-art{position:static!important;display:block!important;width:100%!important;height:auto!important;aspect-ratio:auto!important;margin:0 0 12px!important;object-fit:contain!important;border-radius:9px!important}
+      body.project-view .fit.phone-layout .p1-board .p1-card{position:static!important;width:auto!important;height:auto!important;margin:0 0 11px!important;padding:14px!important;border-radius:10px!important}
+      body.project-view .fit.phone-layout .p1-board h3{font-size:17px!important;margin-bottom:7px!important}
+      body.project-view .fit.phone-layout .p1-board p{font-size:15px!important;line-height:1.42!important}
+      body.project-view .fit.phone-layout .p1-board ol{font-size:14px!important;line-height:1.35!important;padding-left:21px!important}
+      body.project-view .fit.phone-layout .p1-board li{margin-bottom:7px!important}
+
+      /* Projects 02 and 05 were two-column image boards: stack their original
+         pieces so each one can use the full screen width. */
+      body.project-view .fit.phone-layout.piece-board .stage{display:flex!important;flex-direction:column!important;gap:10px!important}
+      body.project-view .fit.phone-layout.piece-board .stage>img{margin:0!important;border-radius:8px!important;box-shadow:0 2px 8px #1234!important}
+
+      /* Project 03's process map becomes a single, readable sequence. */
+      body.project-view .fit.phone-layout .flow{display:flex!important;flex-direction:column!important;gap:10px!important;padding:0!important;background:#0f2d52!important}
+      body.project-view .fit.phone-layout .flow .fb{position:static!important;box-sizing:border-box!important;width:100%!important;height:auto!important;min-height:0!important;margin:0!important;padding:15px!important}
+      body.project-view .fit.phone-layout .flow .fhead{display:flex!important;align-items:center!important;gap:10px!important;padding:13px!important}
+      body.project-view .fit.phone-layout .flow .fhead img{width:42px!important;height:42px!important;margin:0!important;flex:none!important}
+      body.project-view .fit.phone-layout .flow .fhead b{font-size:17px!important;line-height:1.1!important}
+      body.project-view .fit.phone-layout .flow .fhead span{font-size:12px!important}
+      body.project-view .fit.phone-layout .flow h4{font-size:16px!important;margin:0 0 9px!important}
+      body.project-view .fit.phone-layout .flow ul{font-size:14px!important;line-height:1.35!important;margin:0!important;padding-left:20px!important}
+      body.project-view .fit.phone-layout .flow .beige{font-size:17px!important;line-height:1.2!important;text-align:center!important}
+      body.project-view .fit.phone-layout .flow .blk,.fit.phone-layout .flow .fam{min-height:150px!important}
+      body.project-view .fit.phone-layout .flow .farrows,.fit.phone-layout .flow .fl{display:none!important}
+
+      /* The single-page posters keep their natural portrait reading order. */
+      body.project-view .fit.phone-layout.poster .stage>img{border-radius:8px!important;margin:0!important;box-shadow:0 2px 9px #1233!important}
+    }
   </style>
 </head>
 <body>
@@ -332,7 +374,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   </script>
   <script>
     document.querySelectorAll('.fit').forEach(f=>{const bg=f.dataset.bg,fill=f.querySelector('.bgfill');if(bg==='blur'){fill.style.backgroundImage='url("'+f.querySelector('img').src+'")';fill.style.filter='blur(36px) saturate(1.15)'}else{f.style.background=bg}});
-    function fit(){const f=slides[current].querySelector('.fit');if(!f)return;const W=+f.dataset.w,H=+f.dataset.h,k=Math.min((f.clientWidth-16)/W,(f.clientHeight-12)/H);f.querySelector('.stage').style.transform='translate(-50%,-50%) scale('+k+')'}
+    function fit(){const f=slides[current].querySelector('.fit');if(!f)return;const stage=f.querySelector('.stage'),phone=matchMedia('(max-width:700px)').matches;if(phone){f.classList.add('phone-layout');stage.style.left='auto';stage.style.top='auto';stage.style.transform='none';return}f.classList.remove('phone-layout');const W=+f.dataset.w,H=+f.dataset.h,k=Math.min((f.clientWidth-16)/W,(f.clientHeight-12)/H);stage.style.left='50%';stage.style.top='50%';stage.style.transform='translate(-50%,-50%) scale('+k+')'}
+    document.querySelectorAll('.fit').forEach(f=>{if(f.dataset.w==='2116'||f.dataset.w==='1996')f.classList.add('piece-board');if(f.dataset.w==='1188'||f.dataset.w==='1036')f.classList.add('poster')});
     window.addEventListener('resize',fit);
     const modal=document.getElementById('imageModal'),modalImage=document.getElementById('modalImage'),closeImage=document.getElementById('closeImage');
     document.querySelectorAll('.stage img,.cover-art img').forEach(image=>image.addEventListener('click',()=>{modalImage.src=image.src;modalImage.alt=image.alt;modal.classList.add('open');modal.setAttribute('aria-hidden','false')}));
