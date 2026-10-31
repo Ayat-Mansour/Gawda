@@ -194,6 +194,16 @@
     }
 
     .cover h1{font-size:clamp(44px,min(6.5vw,11.5vh),92px)}
+    /* Phone reader: a wide student board cannot be both fully visible and readable
+       on a narrow screen. Keep its type at a reading size and let the reader pan. */
+    @media(max-width:700px){
+      body.project-view .deck{touch-action:pan-x pan-y}
+      body.project-view .fit{overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
+      body.project-view .fit .stage{left:0;top:0;transform-origin:top left}
+      body.project-view .fit .reader-spacer{display:block;visibility:hidden;pointer-events:none}
+      .image-modal{padding:0;cursor:default;-webkit-overflow-scrolling:touch}
+      .image-modal img{max-width:none;min-width:900px;margin:62px 12px 22px}
+    }
   </style>
 </head>
 <body>
@@ -332,7 +342,23 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   </script>
   <script>
     document.querySelectorAll('.fit').forEach(f=>{const bg=f.dataset.bg,fill=f.querySelector('.bgfill');if(bg==='blur'){fill.style.backgroundImage='url("'+f.querySelector('img').src+'")';fill.style.filter='blur(36px) saturate(1.15)'}else{f.style.background=bg}});
-    function fit(){const f=slides[current].querySelector('.fit');if(!f)return;const W=+f.dataset.w,H=+f.dataset.h,k=Math.min((f.clientWidth-16)/W,(f.clientHeight-12)/H);f.querySelector('.stage').style.transform='translate(-50%,-50%) scale('+k+')'}
+    function fit(){
+      const f=slides[current].querySelector('.fit');if(!f)return;
+      const W=+f.dataset.w,H=+f.dataset.h,stage=f.querySelector('.stage');
+      const phone=window.matchMedia('(max-width:700px)').matches;
+      let spacer=f.querySelector('.reader-spacer');
+      if(phone){
+        /* 0.85 keeps the original student writing legible; the board can be swiped horizontally. */
+        const k=Math.max(.85,(f.clientWidth-16)/W);
+        if(!spacer){spacer=document.createElement('div');spacer.className='reader-spacer';f.append(spacer)}
+        spacer.style.width=(W*k)+'px';spacer.style.height=(H*k)+'px';spacer.style.display='block';
+        stage.style.left='0';stage.style.top='0';stage.style.transformOrigin='top left';stage.style.transform='scale('+k+')';
+      }else{
+        if(spacer)spacer.style.display='none';
+        const k=Math.min((f.clientWidth-16)/W,(f.clientHeight-12)/H);
+        stage.style.left='50%';stage.style.top='50%';stage.style.transformOrigin='center center';stage.style.transform='translate(-50%,-50%) scale('+k+')';
+      }
+    }
     window.addEventListener('resize',fit);
     const modal=document.getElementById('imageModal'),modalImage=document.getElementById('modalImage'),closeImage=document.getElementById('closeImage');
     document.querySelectorAll('.stage img,.cover-art img').forEach(image=>image.addEventListener('click',()=>{modalImage.src=image.src;modalImage.alt=image.alt;modal.classList.add('open');modal.setAttribute('aria-hidden','false')}));
