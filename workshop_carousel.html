@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>توثيق ورشة التوعية بالتنمر الإلكتروني</title>
+  <style>
+    :root{--navy:#06304b;--teal:#078c7d;--mist:#eaf7f6;--gold:#f3c553}*{box-sizing:border-box}body{min-height:100vh;margin:0;display:grid;place-items:center;padding:clamp(14px,3vw,36px);background:radial-gradient(circle at 15% 12%,#52c1b61f,transparent 28%),linear-gradient(135deg,#edf8fa,#dceef4);font-family:Cairo,Tahoma,Arial,sans-serif;color:var(--navy)}
+    .gallery{width:min(1080px,100%);padding:clamp(16px,3vw,30px);border:1px solid #ffffffa8;border-radius:25px;background:#ffffffd9;box-shadow:0 22px 60px #06304b22;backdrop-filter:blur(8px)}h1{margin:0;color:var(--navy);font-size:clamp(24px,4vw,42px);line-height:1.15}.intro{margin:8px 0 20px;color:#437080;font-size:clamp(14px,1.7vw,18px)}
+    .carousel{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(8px,2vw,24px)}.frame{position:relative;display:grid;place-items:center;min-height:clamp(270px,60vh,600px);overflow:hidden;padding:8px;border-radius:18px;background:#06263b;box-shadow:0 15px 34px #06304b2b}.photo{display:block;max-width:100%;max-height:clamp(270px,60vh,600px);width:auto;height:auto;border-radius:12px;object-fit:contain;cursor:zoom-in}.caption{position:absolute;right:15px;left:15px;bottom:15px;margin:0;padding:8px 13px;border-radius:8px;background:#021d33ce;color:#fff;text-align:center;font-size:14px;font-weight:700}
+    .arrow{display:grid;place-items:center;width:52px;height:52px;border:0;border-radius:50%;background:var(--navy);color:#fff;font-size:36px;line-height:1;cursor:pointer;box-shadow:0 8px 18px #06304b33;transition:transform .15s,background .15s}.arrow:hover{background:var(--teal);transform:translateY(-2px)}.arrow:focus-visible,.dot:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+    .bottom{display:flex;align-items:center;justify-content:center;gap:13px;margin-top:16px}.count{min-width:48px;color:#376377;font-weight:800;direction:ltr;text-align:center}.dots{display:flex;gap:7px}.dot{width:9px;height:9px;padding:0;border:0;border-radius:99px;background:#b8d6d7;cursor:pointer;transition:width .18s,background .18s}.dot.active{width:26px;background:var(--teal)}.hint{margin:15px 0 0;color:#64808c;text-align:center;font-size:12px}
+    .lightbox{display:none;position:fixed;inset:0;z-index:4;padding:18px;background:#001827e9;cursor:zoom-out}.lightbox.open{display:grid;place-items:center}.lightbox img{max-width:96vw;max-height:92vh;border-radius:10px;box-shadow:0 20px 60px #000}.close{position:fixed;top:16px;left:16px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:var(--navy);font-size:27px;cursor:pointer}
+    @media(max-width:560px){body{padding:10px}.gallery{padding:16px 10px 18px;border-radius:17px}.carousel{grid-template-columns:40px minmax(0,1fr) 40px;gap:5px}.arrow{width:40px;height:40px;font-size:28px}.frame{min-height:300px;padding:4px;border-radius:11px}.photo{max-height:62vh;border-radius:8px}.caption{right:7px;left:7px;bottom:7px;padding:6px 8px;font-size:11px}.hint{font-size:11px}}
+  </style>
+</head>
+<body>
+  <main class="gallery">
+    <h1>توثيق ورشة التوعية بالتنمر الإلكتروني</h1>
+    <p class="intro">لحظات من العرض والمناقشة ومشاركة الطلاب.</p>
+    <section class="carousel" id="carousel" aria-roledescription="carousel" aria-label="صور ورشة التوعية">
+      <button class="arrow" id="next" type="button" aria-label="الصورة التالية">›</button>
+      <div class="frame"><img class="photo" id="photo" src="images/workshop_7_group_clean.jpg" alt="لقطة جماعية من ورشة التوعية بالتنمر الإلكتروني"><p class="caption" id="caption">لقطة جماعية من ورشة التوعية</p></div>
+      <button class="arrow" id="prev" type="button" aria-label="الصورة السابقة">‹</button>
+    </section>
+    <div class="bottom"><div class="dots" id="dots" aria-label="اختيار صورة"></div><span class="count" id="count" aria-live="polite"></span></div>
+    <p class="hint">استخدم الأسهم أو اسحبي الصورة يمينًا ويسارًا. اضغط على الصورة لتكبيرها.</p>
+  </main>
+  <div class="lightbox" id="lightbox" aria-hidden="true"><button class="close" id="close" type="button" aria-label="إغلاق">×</button><img id="large" alt=""></div>
+  <script>
+    const items=[
+      ['images/workshop_7_group_clean.jpg','لقطة جماعية من ورشة التوعية بالتنمر الإلكتروني','لقطة جماعية من ورشة التوعية'],
+      ['images/workshop_1_clean.png','بداية عرض ورشة التوعية','بداية عرض ورشة التوعية'],
+      ['images/workshop_2_clean.png','عرض محاور ورشة التوعية','عرض محاور الورشة'],
+      ['images/workshop_3_clean.png','عرض مشروع الطلاب عن التنمر الإلكتروني','عرض مشروع الطلاب'],
+      ['images/workshop_4_clean.png','مناقشة أمثلة من التنمر الإلكتروني','مناقشة أمثلة من التنمر الإلكتروني'],
+      ['images/workshop_5_clean.png','مناقشة الدعم وطلب المساعدة','مناقشة الدعم وطلب المساعدة'],
+      ['images/workshop_6_clean.png','رسائل توعوية للأسرة','رسائل توعوية للأسرة'],
+      ['images/workshop_8_clean.png','أهم الرسائل التوعوية','أهم الرسائل التوعوية'],
+      ['images/workshop_9_clean.png','إرشادات طلب المساعدة بأمان','إرشادات طلب المساعدة بأمان'],
+      ['images/workshop_10_clean.png','مناقشة السلوك الآمن على الإنترنت','مناقشة السلوك الآمن على الإنترنت']
+    ];
+    const photo=document.getElementById('photo'),caption=document.getElementById('caption'),count=document.getElementById('count'),dots=document.getElementById('dots'),carousel=document.getElementById('carousel'),lightbox=document.getElementById('lightbox'),large=document.getElementById('large');let current=0,startX=0,startY=0;
+    function show(index){current=(index+items.length)%items.length;const item=items[current];photo.src=item[0];photo.alt=item[1];caption.textContent=item[2];count.textContent=(current+1)+' / '+items.length;[...dots.children].forEach((dot,i)=>dot.classList.toggle('active',i===current))}
+    items.forEach((item,index)=>{const dot=document.createElement('button');dot.className='dot';dot.type='button';dot.setAttribute('aria-label','عرض الصورة '+(index+1));dot.addEventListener('click',()=>show(index));dots.append(dot)});
+    document.getElementById('next').onclick=()=>show(current+1);document.getElementById('prev').onclick=()=>show(current-1);
+    photo.onclick=()=>{large.src=photo.src;large.alt=photo.alt;lightbox.classList.add('open');lightbox.setAttribute('aria-hidden','false')};function close(){lightbox.classList.remove('open');lightbox.setAttribute('aria-hidden','true')}document.getElementById('close').onclick=close;lightbox.addEventListener('click',event=>{if(event.target===lightbox)close()});
+    carousel.addEventListener('touchstart',event=>{const touch=event.touches[0];startX=touch.clientX;startY=touch.clientY},{passive:true});carousel.addEventListener('touchend',event=>{const touch=event.changedTouches[0],dx=touch.clientX-startX,dy=touch.clientY-startY;if(Math.abs(dx)>42&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});document.addEventListener('keydown',event=>{if(event.key==='Escape')close();if(!lightbox.classList.contains('open')&&event.key==='ArrowRight')show(current+1);if(!lightbox.classList.contains('open')&&event.key==='ArrowLeft')show(current-1)});show(0);
+  </script>
+</body>
+</html>
